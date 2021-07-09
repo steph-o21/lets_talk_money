@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bubble/bubble.dart';
+import 'package:lets_talk_money/ad_helper.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class Chat extends StatelessWidget{
   const Chat({Key? key, required this.peer, required this.peerID}): super(key: key);
@@ -35,12 +37,17 @@ class _ChatBoxState extends State<ChatBox> {
 
   late String message, currUserID, peerID, conversationID;
 
+  late RewardedAd _rewardedAd;
+
+  bool _isRewardAdSet = false;
+
   @override
   void initState() {
     super.initState();
     currUserID = auth.currentUser!.uid;
     peerID = widget.peerID;
     conversationID = getconversationID(currUserID, widget.peerID);
+    _loadRewardedAd();
   }
 
   @override
@@ -62,7 +69,8 @@ class _ChatBoxState extends State<ChatBox> {
   void sendMessage() {
     _messageHolder.clear(); //to clear textbox
 
-    firestore.collection('messages').doc(conversationID).collection(conversationID).add({ //adding message to firebase
+    firestore.collection('messages').doc(conversationID).collection(
+        conversationID).add({ //adding message to firebase
       'user': <String>[currUserID, widget.peerID],
       'idFrom': currUserID,
       'idTo': widget.peerID,
@@ -133,6 +141,8 @@ class _ChatBoxState extends State<ChatBox> {
                           primary: Colors.pink),
                       onPressed: () {
                         sendMessage();
+                        _rewardedAd.show(onUserEarnedReward: (RewardedAd ad,
+                            RewardItem reward) {});
                       }
                   )
               )
@@ -140,6 +150,7 @@ class _ChatBoxState extends State<ChatBox> {
         )
     );
   }
+
   Widget buildItem(QueryDocumentSnapshot listMessage) {
     return Row(
       children: <Widget>[
@@ -150,12 +161,47 @@ class _ChatBoxState extends State<ChatBox> {
           child: Bubble(
               padding: const BubbleEdges.all(10.0),
               elevation: 0,
-              color: listMessage['idFrom'] == currUserID ? Colors.pink: Colors.purple,
-              child: Text(listMessage['content'], style: listMessage['idFrom'] == currUserID ? TextStyle(color: Colors.white) : TextStyle(color: Colors.white))
+              color: listMessage['idFrom'] == currUserID ? Colors.pink : Colors
+                  .purple,
+              child: Text(listMessage['content'],
+                  style: listMessage['idFrom'] == currUserID ? TextStyle(
+                      color: Colors.white) : TextStyle(color: Colors.white))
           ),
         )
       ],
-      mainAxisAlignment:listMessage['idFrom'] == currUserID ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment: listMessage['idFrom'] == currUserID ? MainAxisAlignment
+          .end : MainAxisAlignment.start,
+    );
+  }
+
+  void _loadRewardedAd() {
+    RewardedAd.load(
+      adUnitId: AdHelper.rewardedAdUnitId,
+      request: AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          this._rewardedAd = ad;
+
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              setState(() {
+                _isRewardAdSet = false;
+              });
+              _loadRewardedAd();
+            },
+          );
+
+          setState(() {
+            _isRewardAdSet = true;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load a rewarded ad: ${err.message}');
+          setState(() {
+            _isRewardAdSet = false;
+          });
+        },
+      ),
     );
   }
 }
