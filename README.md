@@ -17,7 +17,7 @@ Run the Command:
     flutter drive --driver integration_test/integration_test.dart --target integration_test/app_test.dart
 
 ## Admob Ads
-Ads won't run until account gets approved which could take either 24 hrs or 2 weeks. Demo video will be uploaded once account is approved.
+Ads won't run until account gets approved which could take either 24 hrs or 2 weeks. 
 
 - Banner app shows up on the home page
 - Interstitial ad shows up in profile settings
@@ -39,3 +39,6 @@ Inside the 'build.gradle' file under the 'android' folder, add these to the 'dep
     classpath 'com.android.tools.build:gradle:4.1.2'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath 'com.google.gms:google-services:4.3.8'
+    
+ ## Demo Video 
+ Demo videos will be uploaded once account is approved.
