@@ -13,23 +13,20 @@ void main() {
 
     binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
 
-    //wrap into material app for testing
+   
     Widget createWidgetForTesting({Widget? child}){
       return MaterialApp(
           home: child
       );
     }
-
-    //tests scrolling performance from homePage
     testWidgets('Scrolling test', (tester) async {
 
-      //for interstitial ad
       InterstitialAd? _interstitialAd;
       bool _isInterstitialAdReady = false;
 
       WidgetsFlutterBinding.ensureInitialized();
       await Firebase.initializeApp();
-      //wrap into material app
+  
       await tester.pumpWidget(createWidgetForTesting(child: new Profile(interstitialAd: _interstitialAd, isInterstitialAdReady: _isInterstitialAdReady)));
 
       final listFinder = find.byType(SingleChildScrollView);
