@@ -42,3 +42,16 @@ Inside the 'build.gradle' file under the 'android' folder, add these to the 'dep
     
  ## Demo Video 
  Demo videos will be uploaded once account is approved.
+ 
+https://user-images.githubusercontent.com/77403985/125169638-21d79100-e179-11eb-9a09-ec841791fca9.mp4
+
+<img width="1433" alt="Screen Shot 2021-07-10 at 10 23 09 AM" src="https://user-images.githubusercontent.com/77403985/125169669-43387d00-e179-11eb-9134-c9c3a1ce772f.png">
+<img width="1155" alt="Screen Shot 2021-07-10 at 12 26 30 PM" src="https://user-images.githubusercontent.com/77403985/125169877-37998600-e17a-11eb-9b9e-719abb0eca56.png">
+
+https://user-images.githubusercontent.com/77403985/125169959-952dd280-e17a-11eb-8c92-f983634f0c54.mp4
+
+<img width="1433" alt="Integration Test (Android)" src="https://user-images.githubusercontent.com/77403985/125169979-aecf1a00-e17a-11eb-8d4b-0895a57ebc59.png">
+
+
+
+ 
